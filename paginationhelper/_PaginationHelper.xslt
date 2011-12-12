@@ -6,8 +6,9 @@
 	<!-- Paging constants -->
 	<!ENTITY prevPage "&#8249; Previous">
 	<!ENTITY nextPage "Next &#8250;">
+	<!ENTITY pageLinks "5"> <!-- Number of pagination links to show before and after the current page -->
 
-	<!ENTITY pagerParam "p"> <!-- Name of QueryString parameter for 'page' --> 
+	<!ENTITY pagerParam "p"> <!-- Name of QueryString parameter for 'page' -->
 	<!ENTITY perPage "10"> <!-- Number of items on a page -->
 ]>
 <xsl:stylesheet
@@ -73,21 +74,20 @@
 					<a href="?&pagerParam;={$page - 1}">&prevPage;</a>
 				</li>
 			</xsl:if>
-			<!-- Create links for each page available -->
+			<!-- Create links for to the previous and next X number of pages (defined in the pageLinks entity) -->
 			<xsl:for-each select="$selection[position() &lt;= $lastPageNum]">
-				<li>
-					<xsl:choose>
-						<xsl:when test="$page = position()">
-							<xsl:attribute name="class">current</xsl:attribute>
-							<xsl:value-of select="position()" />
-						</xsl:when>
-						<xsl:otherwise>
+				<xsl:choose>
+					<xsl:when test="$page = position()">
+						<li class="current"><xsl:value-of select="position()" /></li>
+					</xsl:when>
+					<xsl:when test="position() - $page &lt;= &pageLinks; and position() - $page &gt;= -&pageLinks;">
+						<li>
 							<a href="?&pagerParam;={position()}">
 								<xsl:value-of select="position()" />
 							</a>
-						</xsl:otherwise>
-					</xsl:choose>
-				</li>
+						</li>
+					</xsl:when>
+				</xsl:choose>
 			</xsl:for-each>
 			<!-- Create the "Next" link (if there is a next page) -->
 			<xsl:if test="$page &lt; $lastPageNum">
