@@ -72,9 +72,11 @@
 		<ul class="pager">
 			<!-- Create the "Previous" link (if there is a previous page) -->
 			<xsl:if test="$page &gt; 1">
-				<li class="prev">
-					<a href="?&searchParam;={$searchTerm}&amp;&pagerParam;={$page - 1}">&prevPage;</a>
-				</li>
+				<xsl:call-template name="PaginationLink">
+					<xsl:with-param name="class" select="'prev'" />
+					<xsl:with-param name="destination" select="$page - 1" />
+					<xsl:with-param name="text" select="'&prevPage;'" />
+				</xsl:call-template>
 			</xsl:if>
 			<!-- Create links for to the previous and next X number of pages (defined in the pageLinks entity) -->
 			<xsl:for-each select="$selection[position() &lt;= $lastPageNum]">
@@ -83,21 +85,43 @@
 						<li class="current"><xsl:value-of select="position()" /></li>
 					</xsl:when>
 					<xsl:when test="position() - $page &lt;= &pageLinks; and position() - $page &gt;= -&pageLinks;">
-						<li>
-							<a href="?&searchParam;={$searchTerm}&amp;&pagerParam;={position()}">
-								<xsl:value-of select="position()" />
-							</a>
-						</li>
+						<xsl:call-template name="PaginationLink">
+							<xsl:with-param name="destination" select="position()" />
+						</xsl:call-template>
 					</xsl:when>
 				</xsl:choose>
 			</xsl:for-each>
 			<!-- Create the "Next" link (if there is a next page) -->
 			<xsl:if test="$page &lt; $lastPageNum">
-				<li class="next">
-					<a href="?&searchParam;={$searchTerm}&amp;&pagerParam;={$page + 1}">&nextPage;</a>
-				</li>
+				<xsl:call-template name="PaginationLink">
+					<xsl:with-param name="class" select="'next'" />
+					<xsl:with-param name="destination" select="$page + 1" />
+					<xsl:with-param name="text" select="'&nextPage;'" />
+				</xsl:call-template>
 			</xsl:if>
 		</ul>
+	</xsl:template>
+
+	<xsl:template name="PaginationLink">
+		<xsl:param name="class" select="false()" />
+		<xsl:param name="destination" select="$page" />
+		<xsl:param name="text" select="$destination" />
+
+		<li>
+			<xsl:if test="normalize-space($class)">
+				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+			</xsl:if>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:text>?</xsl:text>
+					<xsl:if test="normalize-space($searchTerm)">
+						<xsl:value-of select="concat('&searchParam;', '=', $searchTerm, '&amp;')"/>
+					</xsl:if>
+					<xsl:value-of select="concat('&pagerParam;', '=', $destination)"/>
+				</xsl:attribute>
+				<xsl:value-of select="$text"/>
+			</a>
+		</li>
 	</xsl:template>
 
 </xsl:stylesheet>
