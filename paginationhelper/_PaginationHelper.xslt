@@ -45,7 +45,7 @@
 
 		<!-- Only show the pagination controls if there are more than one page of results -->
 		<!-- You can disable the "Pager" control by setting this to false() - then manually calling RenderPager somewhere else -->
-		<xsl:param name="showPager" select="boolean($page * $perPage &lt; count($selection))" />
+		<xsl:param name="showPager" select="boolean($perPage &lt; count($selection))" />
 		
 		<xsl:variable name="startIndex" select="$perPage * ($page - 1) + 1" /><!-- First item on this page -->
 		<xsl:variable name="endIndex" select="$page * $perPage" /><!-- First item on next page -->
