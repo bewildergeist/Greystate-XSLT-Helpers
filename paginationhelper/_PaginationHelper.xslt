@@ -7,8 +7,8 @@
 	<!ENTITY prevPage "&#8249; Previous">
 	<!ENTITY nextPage "Next &#8250;">
 
-	<!ENTITY pagerParam "p">		<!-- Name of QueryString parameter for 'page' --> 
-	<!ENTITY perPage "10">			<!-- Number of items on a page -->
+	<!ENTITY pagerParam "p"> <!-- Name of QueryString parameter for 'page' --> 
+	<!ENTITY perPage "10"> <!-- Number of items on a page -->
 ]>
 <xsl:stylesheet
 	version="1.0"
@@ -34,10 +34,10 @@
 	</xsl:variable>
 	
 	<xsl:template name="PaginateSelection">
-		<!-- The stuff to paginate - defaults to all children of the context node when invoking this  -->
+		<!-- The stuff to paginate - defaults to all children of the context node when invoking this -->
 		<xsl:param name="selection" select="*" />
 
-		<!-- This is to allow forcing a specific page without using QueryString  -->
+		<!-- This is to allow forcing a specific page without using QueryString -->
 		<xsl:param name="page" select="$page" />
 
 		<!-- You can disable the "Pager" control by setting this to false() - then manually calling RenderPager somewhere else -->
@@ -98,7 +98,7 @@
 						<a href="?&pagerParam;={$page + 1}">&nextPage;</a>
 					</xsl:otherwise>
 				</xsl:choose>
-			</li>			
+			</li>
 		</ul>
 	</xsl:template>
 
