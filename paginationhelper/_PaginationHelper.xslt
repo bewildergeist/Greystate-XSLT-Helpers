@@ -67,15 +67,12 @@
 		<xsl:variable name="lastPageNum" select="ceiling($total div $perPage)" />
 
 		<ul class="pager">
-			<!-- Create the "Previous" link -->
-			<li class="prev">
-				<xsl:choose>
-					<xsl:when test="$page = 1">&prevPage;</xsl:when>
-					<xsl:otherwise>
-						<a href="?&pagerParam;={$page - 1}">&prevPage;</a>
-					</xsl:otherwise>
-				</xsl:choose>
-			</li>
+			<!-- Create the "Previous" link (if there is a previous page) -->
+			<xsl:if test="$page &gt; 1">
+				<li class="prev">
+					<a href="?&pagerParam;={$page - 1}">&prevPage;</a>
+				</li>
+			</xsl:if>
 			<!-- Create links for each page available -->
 			<xsl:for-each select="$selection[position() &lt;= $lastPageNum]">
 				<li>
@@ -92,14 +89,12 @@
 					</xsl:choose>
 				</li>
 			</xsl:for-each>
-			<li class="next">
-				<xsl:choose>
-					<xsl:when test="$page = $lastPageNum">&nextPage;</xsl:when>
-					<xsl:otherwise>
-						<a href="?&pagerParam;={$page + 1}">&nextPage;</a>
-					</xsl:otherwise>
-				</xsl:choose>
-			</li>
+			<!-- Create the "Next" link (if there is a next page) -->
+			<xsl:if test="$page &lt; $lastPageNum">
+				<li class="next">
+					<a href="?&pagerParam;={$page + 1}">&nextPage;</a>
+				</li>
+			</xsl:if>
 		</ul>
 	</xsl:template>
 
