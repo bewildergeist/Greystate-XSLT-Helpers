@@ -8,6 +8,7 @@
 	<!ENTITY nextPage "Next &#8250;">
 	<!ENTITY pageLinks "5"> <!-- Number of pagination links to show before and after the current page -->
 
+	<!ENTITY searchParam "q"> <!-- Name of QueryString parameter for 'searchTerm' -->
 	<!ENTITY pagerParam "p"> <!-- Name of QueryString parameter for 'page' -->
 	<!ENTITY perPage "10"> <!-- Number of items on a page -->
 ]>
@@ -21,6 +22,7 @@
 	<xsl:output method="xml" indent="yes" omit-xml-declaration="yes" />
 
 	<!-- Paging variables -->
+	<xsl:variable name="searchTerm" select="&queryString;('&searchParam;')"/>
 	<xsl:variable name="perPage" select="&perPage;" />
 	<xsl:variable name="reqPage" select="&queryString;('&pagerParam;')" />
 	<xsl:variable name="page">
@@ -71,7 +73,7 @@
 			<!-- Create the "Previous" link (if there is a previous page) -->
 			<xsl:if test="$page &gt; 1">
 				<li class="prev">
-					<a href="?&pagerParam;={$page - 1}">&prevPage;</a>
+					<a href="?&searchParam;={$searchTerm}&amp;&pagerParam;={$page - 1}">&prevPage;</a>
 				</li>
 			</xsl:if>
 			<!-- Create links for to the previous and next X number of pages (defined in the pageLinks entity) -->
@@ -82,7 +84,7 @@
 					</xsl:when>
 					<xsl:when test="position() - $page &lt;= &pageLinks; and position() - $page &gt;= -&pageLinks;">
 						<li>
-							<a href="?&pagerParam;={position()}">
+							<a href="?&searchParam;={$searchTerm}&amp;&pagerParam;={position()}">
 								<xsl:value-of select="position()" />
 							</a>
 						</li>
@@ -92,7 +94,7 @@
 			<!-- Create the "Next" link (if there is a next page) -->
 			<xsl:if test="$page &lt; $lastPageNum">
 				<li class="next">
-					<a href="?&pagerParam;={$page + 1}">&nextPage;</a>
+					<a href="?&searchParam;={$searchTerm}&amp;&pagerParam;={$page + 1}">&nextPage;</a>
 				</li>
 			</xsl:if>
 		</ul>
